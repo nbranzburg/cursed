@@ -34,7 +34,6 @@ class CursedMenu():
         return
 
     def renderPagingInfo(self):
-        self.window.setPageFooterColor(self.colors.get_page_info())
         currentPageDisplay = " Page: {0} ".format(self.current_page)
         self.window.setPageInfoText(currentPageDisplay)
 

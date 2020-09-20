@@ -20,8 +20,12 @@ class CursedColorScheme():
     def __init__(self):
         curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
         self.highlight = curses.color_pair(1)
+
         curses.init_pair(2, curses.COLOR_BLACK, curses.COLOR_YELLOW)
         self.page_info = curses.color_pair(2)
+
+        curses.init_pair(3, curses.COLOR_BLACK, curses.COLOR_YELLOW)
+        self.active_title = curses.color_pair(3)
         return
 
     def get_highlight(self):
@@ -30,11 +34,13 @@ class CursedColorScheme():
     def get_page_info(self):
         return self.page_info
 
+    def get_active_title(self):
+        return self.active_title
+
 def main(stdscr):
 
-    win = CursedWindow(True)
-
     defaultColors = CursedColorScheme()
+    win = CursedWindow(True, defaultColors)
 
     activeMenu = CursedMenu(win, defaultColors)
 
