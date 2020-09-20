@@ -15,14 +15,30 @@ class MenuItem():
     def render(self):
         return self.value
 
+class CursedColorScheme():
+
+    def __init__(self):
+        curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
+        self.highlight = curses.color_pair(1)
+        curses.init_pair(2, curses.COLOR_BLACK, curses.COLOR_YELLOW)
+        self.page_info = curses.color_pair(2)
+        return
+
+    def get_highlight(self):
+        return self.highlight
+
+    def get_page_info(self):
+        return self.page_info
+
 def main(stdscr):
 
     win = CursedWindow(True)
 
-    curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
-    activeMenu = CursedMenu(win, curses.color_pair(1))
+    defaultColors = CursedColorScheme()
 
-    for num in range(4):
+    activeMenu = CursedMenu(win, defaultColors)
+
+    for num in range(40):
         activeMenu.addMenuItem(MenuItem("Option {0}".format(num)))
 
     # turn off cursor blinking
