@@ -3,17 +3,21 @@ class CursedMenu():
 
     def __init__(self, window, colors):
         self.window = window
-        self.max_y, self.max_x = window.getMaxYX()
-        self.page_size = self.max_y - 3
         self.current_page = 1
         self.colors = colors
         self.items = []
         self.selected = 0
         return;
 
+    def updatePageSize(self):
+        self.max_y, self.max_x = self.window.getMaxYX()
+        self.page_size = self.max_y - 3
+
     def render(self):
         row = 1
         col = 1
+
+        self.updatePageSize()
 
         firstItemIdx = (self.current_page - 1) * self.page_size
         lastItemIdx = min(firstItemIdx + self.page_size, len(self.items))
@@ -24,6 +28,7 @@ class CursedMenu():
         for idx in rangeToDisplay:
             if idx == self.selected:
                 self.window.turnOnColorScheme(self.colors.get_highlight())
+
             self.window.renderText(self.items[idx].render(), row, col)
             self.window.turnOffColorScheme(self.colors.get_highlight())
             row+=1
@@ -38,6 +43,7 @@ class CursedMenu():
         self.window.setPageInfoText(currentPageDisplay)
 
     def processKeyInput(self, key):
+        self.updatePageSize()
 
         if key == curses.KEY_UP and self.selected > 0:
             self.selected -= 1

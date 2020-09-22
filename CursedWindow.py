@@ -3,24 +3,45 @@ import curses
 class CursedWindow():
 
     def __init__(self, hasBorder, colors, title="Window"):
-        begin_x = 20; begin_y = 7
-        height = 10; width = 40
+        self.begin_x = 0
+        self.begin_y = 0
+        self.height = 50
+        self.width = 50
 
         # Intialize color scheme
         self.colors = colors
 
         # Initialize active window
         self.hasBorder = hasBorder
-        self.active_tab = curses.newwin(height, width, begin_y, begin_x)
+        self.active_tab = curses.newwin(self.height, self.width, self.begin_y, self.begin_x)
 
         # Initialize paging info footer
-        self.active_paging_info = curses.newwin(1, width - 2, begin_y + height-1, begin_x + 1)
+        self.active_paging_info = curses.newwin(1, self.width - 2, self.begin_y + self.height-1, self.begin_x + 1)
         self.active_paging_info.bkgd(' ', self.colors.get_page_info())
 
         # Initialize title
         self.active_title = title
 
         return
+
+    def changePosition(self, height, width, begin_x, begin_y):
+
+        self.height = height
+        self.width = width
+        self.begin_x = begin_x
+        self.begin_y = begin_y
+
+        # Reset window position to avoid accidentally rending outside allowed range
+        self.active_paging_info.mvwin(0, 0)
+        self.active_paging_info.mvwin(0, 0)
+
+        self.active_tab.resize(self.height, self.width)
+        self.active_paging_info.resize(1, self.width - 2)
+
+        self.active_tab.mvwin(self.begin_y, self.begin_x)
+        self.active_paging_info.mvwin(self.begin_y + self.height-1, self.begin_x + 1)
+
+
 
     def clear(self):
         self.active_tab.clear()

@@ -1,6 +1,7 @@
 import curses
 from CursedMenu import CursedMenu
 from CursedWindow import CursedWindow
+from CursedWindowGroup import CursedWindowGroup
 from curses import wrapper
 from curses import textpad
 
@@ -40,9 +41,11 @@ class CursedColorScheme():
 def main(stdscr):
 
     defaultColors = CursedColorScheme()
-    win = CursedWindow(True, defaultColors)
 
+    win = CursedWindow(True, defaultColors)
     activeMenu = CursedMenu(win, defaultColors)
+    windowGroup = CursedWindowGroup()
+    windowGroup.addWindow(stdscr, win, CursedWindowGroup.Position.RIGHT_VERTICAL_SPLIT)
 
     for num in range(40):
         activeMenu.addMenuItem(MenuItem("Option {0}".format(num)))
