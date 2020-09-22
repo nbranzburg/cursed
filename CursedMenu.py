@@ -26,7 +26,7 @@ class CursedMenu():
 
         self.window.clear()
         for idx in rangeToDisplay:
-            if idx == self.selected:
+            if idx == self.selected and self.window.getIsActive():
                 self.window.turnOnColorScheme(self.colors.get_highlight())
 
             self.window.renderText(self.items[idx].render(), row, col)
