@@ -53,38 +53,43 @@ def main(stdscr):
 
     defaultColors = CursedColorScheme()
 
-    win = CursedWindow(True, defaultColors, "Actionables", True)
-    activeMenu = CursedMenu(win, defaultColors)
+    top_win = CursedWindow(True, defaultColors, "Actionables", True)
+    topMenu = CursedMenu(top_win, defaultColors)
 
-    left_win = CursedWindow(True, defaultColors, "Values")
-    left_menu = CursedMenu(left_win, defaultColors)
+    bottom_win = CursedWindow(True, defaultColors, "Values")
+    bottomMenu = CursedMenu(bottom_win, defaultColors)
 
     windowGroup = CursedWindowGroup()
 
-    windowGroup.addSubWindow(stdscr, left_win, CursedWindowGroup.Position.BOTTOM_HORIZONTAL_THIRD)
-    windowGroup.addSubWindow(stdscr, win, CursedWindowGroup.Position.TOP_TWO_THIRDS)
+    windowGroup.addSubWindow(stdscr, bottom_win, CursedWindowGroup.Position.BOTTOM_HORIZONTAL_THIRD)
+    windowGroup.addSubWindow(stdscr, top_win, CursedWindowGroup.Position.TOP_TWO_THIRDS)
 
     for num in range(40):
-        activeMenu.addMenuItem(MenuItem("Option {0}".format(num)))
+        topMenu.addMenuItem(MenuItem("Option {0}".format(num)))
 
     for num in range(40):
-        left_menu.addMenuItem(MenuItem("Thing {0}".format(num)))
+        bottomMenu.addMenuItem(MenuItem("Thing {0}".format(num)))
     # turn off cursor blinking
     curses.curs_set(0)
 
     stdscr.refresh()
-    activeMenu.render()
-    left_menu.render()
+    topMenu.render()
+    bottomMenu.render()
 
     keep_going = True
     while keep_going:
         key = stdscr.getch()
         if key == ord('q'):
             keep_going = False
+        elif key == ord('\t'):
+            bottom_win.setActive(True)
+            top_win.setActive(False)
+            topMenu.render()
+            bottomMenu.render()
         else:
-            activeMenu = activeMenu.processKeyInput(key)
+            top_win.handleKeyEvent(key)
 
-        activeMenu.render()
+        topMenu.render()
         #curses.doupdate()
 
 wrapper(main)

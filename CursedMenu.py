@@ -3,6 +3,8 @@ class CursedMenu():
 
     def __init__(self, window, colors):
         self.window = window
+        self.window.registerKeyEventHandler(self)
+
         self.current_page = 1
         self.colors = colors
         self.items = []
@@ -42,7 +44,7 @@ class CursedMenu():
         currentPageDisplay = " Page: {0} ".format(self.current_page)
         self.window.setPageInfoText(currentPageDisplay)
 
-    def processKeyInput(self, key):
+    def handleKeyEvent(self, key):
         self.updatePageSize()
 
         if key == curses.KEY_UP and self.selected > 0:
@@ -51,8 +53,6 @@ class CursedMenu():
             self.selected += 1
 
         self.current_page = self.selected // self.page_size + 1
-
-        return self
 
     def addMenuItem(self, item):
         self.items.append(item)

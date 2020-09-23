@@ -20,9 +20,11 @@ class CursedWindow():
         # Initialize paging info footer
         self.paging_info = curses.newwin(1, self.width - 2, self.begin_y + self.height-1, self.begin_x + 1)
 
-
         # Initialize title
         self.active_title = title
+
+        # Initialize key event handlers
+        self.key_event_handlers = []
 
         return
 
@@ -83,3 +85,13 @@ class CursedWindow():
 
     def getIsActive(self):
         return self.isActive
+
+    def setActive(self, isActive):
+        self.isActive = isActive
+
+    def registerKeyEventHandler(self, handler):
+        self.key_event_handlers.append(handler)
+
+    def handleKeyEvent(self, key):
+        for handlers in self.key_event_handlers:
+            handlers.handleKeyEvent(key)
