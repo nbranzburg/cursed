@@ -1,51 +1,53 @@
 import curses
-class CursedMenu():
+
+
+class CursedMenu:
 
     def __init__(self, window, colors):
         self.window = window
-        self.window.registerKeyEventHandler(self)
+        self.window.register_key_event_handler(self)
 
         self.current_page = 1
         self.colors = colors
         self.items = []
         self.selected = 0
-        return;
+        return
 
-    def updatePageSize(self):
-        self.max_y, self.max_x = self.window.getMaxYX()
+    def update_page_size(self):
+        self.max_y, self.max_x = self.window.get_max_yx()
         self.page_size = self.max_y - 3
 
     def render(self):
         row = 1
         col = 1
 
-        self.updatePageSize()
+        self.update_page_size()
 
-        firstItemIdx = (self.current_page - 1) * self.page_size
-        lastItemIdx = min(firstItemIdx + self.page_size, len(self.items))
+        first_item_idx = (self.current_page - 1) * self.page_size
+        last_item_idx = min(first_item_idx + self.page_size, len(self.items))
 
-        rangeToDisplay = range(firstItemIdx, lastItemIdx)
+        range_to_display = range(first_item_idx, last_item_idx)
 
         self.window.clear()
-        for idx in rangeToDisplay:
-            if idx == self.selected and self.window.getIsActive():
-                self.window.turnOnColorScheme(self.colors.get_highlight())
+        for idx in range_to_display:
+            if idx == self.selected and self.window.get_is_active():
+                self.window.turn_on_color_scheme(self.colors.get_highlight())
 
-            self.window.renderText(self.items[idx].render(), row, col)
-            self.window.turnOffColorScheme(self.colors.get_highlight())
-            row+=1
+            self.window.render_text(self.items[idx].render(), row, col)
+            self.window.turn_off_color_scheme(self.colors.get_highlight())
+            row += 1
 
-        self.renderPagingInfo()
+        self.render_paging_info()
 
         self.window.refresh()
         return
 
-    def renderPagingInfo(self):
-        currentPageDisplay = " Page: {0} ".format(self.current_page)
-        self.window.setPageInfoText(currentPageDisplay)
+    def render_paging_info(self):
+        current_page_display = " Page: {0} ".format(self.current_page)
+        self.window.set_page_info_text(current_page_display)
 
-    def handleKeyEvent(self, key):
-        self.updatePageSize()
+    def handle_key_event(self, key):
+        self.update_page_size()
 
         if key == curses.KEY_UP and self.selected > 0:
             self.selected -= 1
@@ -54,5 +56,5 @@ class CursedMenu():
 
         self.current_page = self.selected // self.page_size + 1
 
-    def addMenuItem(self, item):
+    def add_menu_item(self, item):
         self.items.append(item)

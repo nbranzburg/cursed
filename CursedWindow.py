@@ -1,20 +1,21 @@
 import curses
 
-class CursedWindow():
 
-    def __init__(self, hasBorder, colors, title="Window", isActive = False):
+class CursedWindow:
+
+    def __init__(self, has_border, colors, title="Window", is_active=False):
         self.begin_x = 0
         self.begin_y = 0
         self.height = 50
         self.width = 50
 
-        self.isActive = isActive
+        self.isActive = is_active
 
-        # Intialize color scheme
+        # Initialize color scheme
         self.colors = colors
 
         # Initialize active window
-        self.hasBorder = hasBorder
+        self.hasBorder = has_border
         self.current_tab = curses.newwin(self.height, self.width, self.begin_y, self.begin_x)
 
         # Initialize paging info footer
@@ -28,7 +29,7 @@ class CursedWindow():
 
         return
 
-    def changePosition(self, height, width, begin_x, begin_y):
+    def change_position(self, height, width, begin_x, begin_y):
 
         self.height = height
         self.width = width
@@ -55,43 +56,43 @@ class CursedWindow():
 
         if self.isActive:
             self.paging_info.bkgd(' ', self.colors.get_active_page_info())
-            self.turnOnColorScheme(self.colors.get_active_title())
+            self.turn_on_color_scheme(self.colors.get_active_title())
         else:
             self.paging_info.bkgd(' ', self.colors.get_page_info())
-            self.turnOnColorScheme(self.colors.get_title())
+            self.turn_on_color_scheme(self.colors.get_title())
 
         self.current_tab.addstr(0, 1, " {0} ".format(self.active_title))
-        self.turnOffColorScheme(self.colors.get_active_title())
-        self.turnOffColorScheme(self.colors.get_title())
+        self.turn_off_color_scheme(self.colors.get_active_title())
+        self.turn_off_color_scheme(self.colors.get_title())
 
         self.current_tab.refresh()
         self.paging_info.refresh()
 
-    def turnOnColorScheme(self, colorScheme):
-        self.current_tab.attron(colorScheme)
+    def turn_on_color_scheme(self, color_scheme):
+        self.current_tab.attron(color_scheme)
 
-    def turnOffColorScheme(self, colorScheme):
-        self.current_tab.attroff(colorScheme)
+    def turn_off_color_scheme(self, color_scheme):
+        self.current_tab.attroff(color_scheme)
 
-    def renderText(self, text, row, col):
+    def render_text(self, text, row, col):
         self.current_tab.addstr(row, col, text)
 
-    def getMaxYX(self):
+    def get_max_yx(self):
         return self.current_tab.getmaxyx()
 
-    def setPageInfoText(self, text):
+    def set_page_info_text(self, text):
         y_max, x_max = self.paging_info.getmaxyx()
         self.paging_info.addstr(0, (x_max // 2) - len(text) // 2, text)
 
-    def getIsActive(self):
+    def get_is_active(self):
         return self.isActive
 
-    def setActive(self, isActive):
-        self.isActive = isActive
+    def set_active(self, is_active):
+        self.isActive = is_active
 
-    def registerKeyEventHandler(self, handler):
+    def register_key_event_handler(self, handler):
         self.key_event_handlers.append(handler)
 
-    def handleKeyEvent(self, key):
+    def handle_key_event(self, key):
         for handlers in self.key_event_handlers:
-            handlers.handleKeyEvent(key)
+            handlers.handle_key_event(key)

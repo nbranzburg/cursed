@@ -1,6 +1,7 @@
 from enum import Enum
 
-class CursedWindowGroup():
+
+class CursedWindowGroup:
 
     class Position(Enum):
         LEFT_VERTICAL_SPLIT = 0
@@ -16,23 +17,23 @@ class CursedWindowGroup():
         self.windows = []
         return
 
-    def addSubWindow(self, parentWindow, window, position):
-        y_max, x_max = parentWindow.getmaxyx()
+    def add_sub_window(self, parent_window, window, position):
+        y_max, x_max = parent_window.getmaxyx()
 
         if position == CursedWindowGroup.Position.LEFT_VERTICAL_SPLIT:
-            window.changePosition(y_max, x_max // 2, 0, 0)
+            window.change_position(y_max, x_max // 2, 0, 0)
         elif position == CursedWindowGroup.Position.RIGHT_VERTICAL_SPLIT:
-            window.changePosition(y_max, x_max // 2, x_max // 2, 0)
+            window.change_position(y_max, x_max // 2, x_max // 2, 0)
         elif position == CursedWindowGroup.Position.TOP_HORIZONTAL_SPLIT:
-            window.changePosition(y_max // 2, x_max, 0, 0)
+            window.change_position(y_max // 2, x_max, 0, 0)
         elif position == CursedWindowGroup.Position.TOP_TWO_THIRDS:
-            window.changePosition((2*y_max) // 3, x_max, 0, 0)
+            window.change_position((2 * y_max) // 3, x_max, 0, 0)
         elif position == CursedWindowGroup.Position.BOTTOM_HORIZONTAL_THIRD:
-            window.changePosition(y_max // 3, x_max, 0, (2 * y_max) // 3)
+            window.change_position(y_max // 3, x_max, 0, (2 * y_max) // 3)
         elif position == CursedWindowGroup.Position.TOP_HORIZONTAL_THIRD:
-            window.changePosition(y_max // 3, x_max, 0, 0)
+            window.change_position(y_max // 3, x_max, 0, 0)
         elif position == CursedWindowGroup.Position.MIDDLE_HORIZONTAL_THIRD:
-            window.changePosition(y_max // 3, x_max, 0, y_max // 3)
+            window.change_position(y_max // 3, x_max, 0, y_max // 3)
         elif position == CursedWindowGroup.Position.BOTTOM_HORIZONTAL_THIRD:
-            window.changePosition(y_max // 3, x_max, 0, (2 * y_max) // 3)
+            window.change_position(y_max // 3, x_max, 0, (2 * y_max) // 3)
         return

@@ -3,9 +3,9 @@ from CursedMenu import CursedMenu
 from CursedWindow import CursedWindow
 from CursedWindowGroup import CursedWindowGroup
 from curses import wrapper
-from curses import textpad
 
-class MenuItem():
+
+class MenuItem:
     def __init__(self, value):
         self.value = value
         return
@@ -16,7 +16,8 @@ class MenuItem():
     def render(self):
         return self.value
 
-class CursedColorScheme():
+
+class CursedColorScheme:
 
     def __init__(self):
         curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
@@ -49,32 +50,32 @@ class CursedColorScheme():
     def get_title(self):
         return self.title
 
+
 def main(stdscr):
+    default_colors = CursedColorScheme()
 
-    defaultColors = CursedColorScheme()
+    top_win = CursedWindow(True, default_colors, "Actionables", True)
+    top_menu = CursedMenu(top_win, default_colors)
 
-    top_win = CursedWindow(True, defaultColors, "Actionables", True)
-    topMenu = CursedMenu(top_win, defaultColors)
+    bottom_win = CursedWindow(True, default_colors, "Values")
+    bottom_menu = CursedMenu(bottom_win, default_colors)
 
-    bottom_win = CursedWindow(True, defaultColors, "Values")
-    bottomMenu = CursedMenu(bottom_win, defaultColors)
+    window_group = CursedWindowGroup()
 
-    windowGroup = CursedWindowGroup()
-
-    windowGroup.addSubWindow(stdscr, bottom_win, CursedWindowGroup.Position.BOTTOM_HORIZONTAL_THIRD)
-    windowGroup.addSubWindow(stdscr, top_win, CursedWindowGroup.Position.TOP_TWO_THIRDS)
-
-    for num in range(40):
-        topMenu.addMenuItem(MenuItem("Option {0}".format(num)))
+    window_group.add_sub_window(stdscr, bottom_win, CursedWindowGroup.Position.BOTTOM_HORIZONTAL_THIRD)
+    window_group.add_sub_window(stdscr, top_win, CursedWindowGroup.Position.TOP_TWO_THIRDS)
 
     for num in range(40):
-        bottomMenu.addMenuItem(MenuItem("Thing {0}".format(num)))
+        top_menu.add_menu_item(MenuItem("Option {0}".format(num)))
+
+    for num in range(40):
+        bottom_menu.add_menu_item(MenuItem("Thing {0}".format(num)))
     # turn off cursor blinking
     curses.curs_set(0)
 
     stdscr.refresh()
-    topMenu.render()
-    bottomMenu.render()
+    top_menu.render()
+    bottom_menu.render()
 
     keep_going = True
     while keep_going:
@@ -82,14 +83,14 @@ def main(stdscr):
         if key == ord('q'):
             keep_going = False
         elif key == ord('\t'):
-            bottom_win.setActive(True)
-            top_win.setActive(False)
-            topMenu.render()
-            bottomMenu.render()
+            bottom_win.set_active(True)
+            top_win.set_active(False)
+            top_menu.render()
+            bottom_menu.render()
         else:
-            top_win.handleKeyEvent(key)
+            top_win.handle_key_event(key)
 
-        topMenu.render()
-        #curses.doupdate()
+        top_menu.render()
+
 
 wrapper(main)
