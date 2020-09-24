@@ -74,8 +74,7 @@ def main(stdscr):
     curses.curs_set(0)
 
     stdscr.refresh()
-    top_win.refresh()
-    bottom_win.refresh()
+    window_group.update_all()
 
     keep_going = True
     while keep_going:
@@ -85,14 +84,10 @@ def main(stdscr):
         elif key == ord('\t'):
             bottom_win.set_active(True)
             top_win.set_active(False)
-            top_win.clear()
-            bottom_win.clear()
-            top_win.refresh()
-            bottom_win.refresh()
+            window_group.update_all()
         else:
             top_win.handle_key_event(key)
-        top_win.clear()
-        top_win.refresh()
 
+        window_group.update_all()
 
 wrapper(main)

@@ -36,4 +36,12 @@ class CursedWindowGroup:
             window.change_position(y_max // 3, x_max, 0, y_max // 3)
         elif position == CursedWindowGroup.Position.BOTTOM_HORIZONTAL_THIRD:
             window.change_position(y_max // 3, x_max, 0, (2 * y_max) // 3)
+
+        self.windows.append(window)
+
         return
+
+    def update_all(self):
+        for win in self.windows:
+            win.clear()
+            win.refresh()
