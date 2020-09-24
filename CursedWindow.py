@@ -29,7 +29,7 @@ class CursedWindow:
 
         # Initialize content
         self.content = content
-        self.content.set_window(self)
+        self.register_key_event_handler(content)
 
         return
 
@@ -68,6 +68,8 @@ class CursedWindow:
         self.current_tab.addstr(0, 1, " {0} ".format(self.active_title))
         self.turn_off_color_scheme(self.colors.get_active_title())
         self.turn_off_color_scheme(self.colors.get_title())
+
+        self.content.render(self)
 
         self.current_tab.refresh()
         self.paging_info.refresh()
