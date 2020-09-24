@@ -3,15 +3,17 @@ import curses
 
 class CursedMenu:
 
-    def __init__(self, window, colors):
-        self.window = window
-        self.window.register_key_event_handler(self)
+    def __init__(self, colors):
 
         self.current_page = 1
         self.colors = colors
         self.items = []
         self.selected = 0
         return
+
+    def set_window(self, window):
+        self.window = window
+        self.window.register_key_event_handler(self)
 
     def update_page_size(self):
         self.max_y, self.max_x = self.window.get_max_yx()

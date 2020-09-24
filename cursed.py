@@ -54,11 +54,11 @@ class CursedColorScheme:
 def main(stdscr):
     default_colors = CursedColorScheme()
 
-    top_win = CursedWindow(True, default_colors, "Actionables", True)
-    top_menu = CursedMenu(top_win, default_colors)
+    top_menu = CursedMenu(default_colors)
+    top_win = CursedWindow(True, default_colors, top_menu, "Actionables", True)
 
-    bottom_win = CursedWindow(True, default_colors, "Values")
-    bottom_menu = CursedMenu(bottom_win, default_colors)
+    bottom_menu = CursedMenu(default_colors)
+    bottom_win = CursedWindow(True, default_colors, bottom_menu, "Values")
 
     window_group = CursedWindowGroup()
 

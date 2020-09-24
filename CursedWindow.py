@@ -3,7 +3,7 @@ import curses
 
 class CursedWindow:
 
-    def __init__(self, has_border, colors, title="Window", is_active=False):
+    def __init__(self, has_border, colors, content, title="Window", is_active=False):
         self.begin_x = 0
         self.begin_y = 0
         self.height = 50
@@ -26,6 +26,10 @@ class CursedWindow:
 
         # Initialize key event handlers
         self.key_event_handlers = []
+
+        # Initialize content
+        self.content = content
+        self.content.set_window(self)
 
         return
 
