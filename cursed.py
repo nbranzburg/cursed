@@ -81,12 +81,8 @@ def main(stdscr):
         key = stdscr.getch()
         if key == ord('q'):
             keep_going = False
-        elif key == ord('\t'):
-            bottom_win.set_active(True)
-            top_win.set_active(False)
-            window_group.update_all()
         else:
-            top_win.handle_key_event(key)
+            window_group.handle_key_event(key)
 
         window_group.update_all()
 
