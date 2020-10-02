@@ -50,3 +50,4 @@ class CursedMenu:
 
     def add_menu_item(self, item):
         self.items.append(item)
+

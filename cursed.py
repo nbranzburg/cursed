@@ -35,6 +35,12 @@ class CursedColorScheme:
         curses.init_pair(5, curses.COLOR_BLACK, curses.COLOR_WHITE)
         self.title = curses.color_pair(5)
 
+        curses.init_pair(6, curses.COLOR_BLACK, curses.COLOR_MAGENTA)
+        self.menu = curses.color_pair(6)
+
+    def get_menu(self):
+        return self.menu
+
     def get_highlight(self):
         return self.highlight
 
