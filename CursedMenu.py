@@ -14,12 +14,22 @@ class CursedMenu:
     def render(self, window):
         row = 1
         col = 1
+        query = window.get_query_string()
+        items = self.items
+
+        if query != "":
+            items = [item for item in items if query in item.dump_values()]
+            # Keep the selected item and page constrained to the filtered items
+            if self.selected >= len(items):
+                self.selected = len(items) - 1
+            if (self.current_page - 1) * self.page_size >= len(items):
+                self.current_page = 1
 
         max_y, max_x = window.get_max_yx()
         self.page_size = max_y - 3
 
         first_item_idx = (self.current_page - 1) * self.page_size
-        last_item_idx = min(first_item_idx + self.page_size, len(self.items))
+        last_item_idx = min(first_item_idx + self.page_size, len(items))
 
         range_to_display = range(first_item_idx, last_item_idx)
 
@@ -27,7 +37,7 @@ class CursedMenu:
             if idx == self.selected and window.get_is_active():
                 window.turn_on_color_scheme(self.colors.get_highlight())
 
-            window.render_text(self.items[idx].render(), row, col)
+            window.render_text(items[idx].render(), row, col)
             window.turn_off_color_scheme(self.colors.get_highlight())
             row += 1
 

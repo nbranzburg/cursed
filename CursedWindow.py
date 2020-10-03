@@ -5,10 +5,13 @@ from CursedDropMenu import CursedDropMenu
 class CursedWindow:
 
     def __init__(self, has_border, colors, content, title="Window", is_active=False):
+        self.query_string = ""
         self.begin_x = 0
         self.begin_y = 0
         self.height = 50
         self.width = 50
+
+        self.search_mode_is_active = False
 
         self.display_menu = False
 
@@ -103,6 +106,9 @@ class CursedWindow:
         y_max, x_max = self.paging_info.getmaxyx()
         self.paging_info.addstr(0, (x_max // 2) - len(text) // 2, text)
 
+        if self.search_mode_is_active:
+            self.paging_info.addstr(0, 1, "/{0}".format(self.query_string))
+
     def get_is_active(self):
         return self.isActive
 
@@ -110,16 +116,37 @@ class CursedWindow:
         self.isActive = is_active
         if not self.isActive:
             self.display_menu = False
+            self.search_mode_is_active = False
 
     def register_key_event_handler(self, handler):
         self.key_event_handlers.append(handler)
 
     def handle_key_event(self, key):
-
-        if key == ord("0"):
+        if self.search_mode_is_active and not CursedWindow.is_control_key(key):
+            self.query_string += chr(key)
+        elif key == curses.KEY_BACKSPACE:
+            if len(self.query_string) > 0:
+                self.query_string = self.query_string[:-1]
+            else:
+                self.search_mode_is_active = False
+        elif key == 27:
+            self.query_string = ""
+            self.search_mode_is_active = False
+        elif key == ord("0"):
             self.display_menu = not self.display_menu
-        for handlers in self.key_event_handlers:
-            handlers.handle_key_event(key)
+        elif key == ord("/"):
+            self.search_mode_is_active = True
+        else:
+            for handlers in self.key_event_handlers:
+                handlers.handle_key_event(key)
+
+    @staticmethod
+    def is_control_key(key):
+        escape_key = 27
+        return key == curses.KEY_BACKSPACE or key == escape_key or key == curses.KEY_UP or key == curses.KEY_DOWN
 
     def get_pos_info(self):
         return self.begin_x, self.begin_y, self.height, self.width
+
+    def get_query_string(self):
+        return self.query_string
