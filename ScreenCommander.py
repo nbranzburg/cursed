@@ -62,7 +62,7 @@ class ScreenCommander:
         os.system(win_cmd(self.session_id, self.active_window, "scrollback 150000"))
 
     def dump_to_file(self):
-        os.system(win_cmd(self.session_id, self.active_window, "hardcopy {0}{1}".format(self.output_dir, self.session_id)))
+        os.system(win_cmd(self.session_id, self.active_window, "hardcopy -h {0}{1}".format(self.output_dir, self.session_id)))
 
     def grab_contents(self):
         self.dump_to_file()
@@ -71,3 +71,9 @@ class ScreenCommander:
 
     def set_active_window(self, window_id):
         self.active_window = window_id
+
+    def run_batch_file(self, path):
+        os.system(sess_cmd(self.session_id, "bufferfile {0}".format(path)))
+        os.system(sess_cmd(self.session_id, "readbuf"))
+        os.system(sess_cmd(self.session_id, "paste ."))
+        os.system(sess_cmd(self.session_id, "bufferfile"))
