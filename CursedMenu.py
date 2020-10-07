@@ -53,8 +53,10 @@ class CursedMenu:
 
         if key == curses.KEY_UP and self.selected > 0:
             self.selected -= 1
-        elif key == curses.KEY_DOWN and self.selected < len(self.items)-1:
+        elif key == curses.KEY_DOWN and self.selected < len(self.items) - 1:
             self.selected += 1
+        elif key == curses.KEY_ENTER or key == 10:
+            self.items[self.selected].action()
 
         self.current_page = self.selected // self.page_size + 1
 

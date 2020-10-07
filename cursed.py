@@ -3,24 +3,9 @@ from CursedMenu import CursedMenu
 from CursedWindow import CursedWindow
 from CursedWindowGroup import CursedWindowGroup
 from curses import wrapper
-
-
-class MenuItem:
-    def __init__(self, value):
-        self.value = value
-        return
-
-    def __iter__(self):
-        return self
-
-    def action(self):
-        return
-
-    def render(self):
-        return self.value
-
-    def dump_values(self):
-        return self.value
+from MenuItem import MenuItem
+from ScreenItem import ScreenItem
+from SessionStorage import SessionStorage
 
 
 class CursedColorScheme:
@@ -77,8 +62,13 @@ def main(stdscr):
     window_group.add_sub_window(stdscr, bottom_win, CursedWindowGroup.Position.BOTTOM_HORIZONTAL_THIRD)
     window_group.add_sub_window(stdscr, top_win, CursedWindowGroup.Position.TOP_TWO_THIRDS)
 
-    for num in range(40):
-        top_menu.add_menu_item(MenuItem("Option {0}".format(num)))
+    try:
+        sessions = SessionStorage("./test.json").get_sessions()
+        for sess in sessions:
+            item = ScreenItem(sess["session_id"], sess["windows"], sess)
+            top_menu.add_menu_item(item)
+    except FileNotFoundError:
+        print("No stored sessions found")
 
     for num in range(40):
         bottom_menu.add_menu_item(MenuItem("Thing {0}".format(num)))
@@ -96,6 +86,11 @@ def main(stdscr):
         else:
             window_group.handle_key_event(key)
 
+        if key == curses.KEY_ENTER or key == 10:
+            # If a screen session as entered, we will need the keypad mode back on
+            stdscr.keypad(1)
+
         window_group.update_all()
+
 
 wrapper(main)
