@@ -57,9 +57,19 @@ class CursedMenu:
             self.selected += 1
         elif key == curses.KEY_ENTER or key == 10:
             self.items[self.selected].action()
+        else:
+            self.handle_special_key_event(key)
 
         self.current_page = self.selected // self.page_size + 1
 
     def add_menu_item(self, item):
         self.items.append(item)
 
+    def get_menu_items(self):
+        return self.items
+
+    def handle_special_key_event(self, key):
+        pass
+
+    def save(self):
+        pass

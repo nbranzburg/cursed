@@ -14,3 +14,7 @@ class MenuItem:
 
     def dump_values(self):
         return self.value
+
+    def serialize(self):
+        return self.value
+

@@ -6,6 +6,7 @@ from curses import wrapper
 from MenuItem import MenuItem
 from ScreenItem import ScreenItem
 from SessionStorage import SessionStorage
+from SessionMenu import SessionMenu
 
 
 class CursedColorScheme:
@@ -51,7 +52,10 @@ class CursedColorScheme:
 def main(stdscr):
     default_colors = CursedColorScheme()
 
-    top_menu = CursedMenu(default_colors)
+    stored_session_file = "./saved_sessions.json"
+    session_storage = SessionStorage(stored_session_file)
+
+    top_menu = SessionMenu(default_colors, session_storage)
     top_win = CursedWindow(True, default_colors, top_menu, "Actionables", True)
 
     bottom_menu = CursedMenu(default_colors)
@@ -63,7 +67,7 @@ def main(stdscr):
     window_group.add_sub_window(stdscr, top_win, CursedWindowGroup.Position.TOP_TWO_THIRDS)
 
     try:
-        sessions = SessionStorage("./test.json").get_sessions()
+        sessions = session_storage.load_sessions()
         for sess in sessions:
             item = ScreenItem(sess["session_id"], sess["windows"], sess)
             top_menu.add_menu_item(item)
@@ -78,19 +82,22 @@ def main(stdscr):
     stdscr.refresh()
     window_group.update_all()
 
-    keep_going = True
-    while keep_going:
-        key = stdscr.getch()
-        if key == ord('q'):
-            keep_going = False
-        else:
-            window_group.handle_key_event(key)
+    try:
+        keep_going = True
+        while keep_going:
+            key = stdscr.getch()
+            if key == ord('q'):
+                keep_going = False
+            else:
+                window_group.handle_key_event(key)
 
-        if key == curses.KEY_ENTER or key == 10:
-            # If a screen session as entered, we will need the keypad mode back on
-            stdscr.keypad(1)
+            if key == curses.KEY_ENTER or key == 10:
+                # If a screen session as entered, we will need the keypad mode back on
+                stdscr.keypad(1)
 
-        window_group.update_all()
+            window_group.update_all()
+    finally:
+        top_menu.save()
 
 
 wrapper(main)
